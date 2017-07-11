@@ -74,27 +74,35 @@ function gnCallBack(data) {
             "<br> Speed: " + speed;
 
         if (direction > 0 && direction < 180) {
+            button("l");
             left.style.backgroundColor ="#00A7FF";
             output.innerHTML += "<br> Turning left ";
         } else {
+            button("h");
             left.style.backgroundColor ="white";
         }
         if (direction > 180 && direction < 360) {
+            button("r");
             right.style.backgroundColor ="#00A7FF";
             output.innerHTML += "<br> Turning right ";
         } else {
+            button("h");
             right.style.backgroundColor ="white";
         }
         if (speed < -2) {
+            button("b");
             down.style.backgroundColor ="#00A7FF";
             output.innerHTML += "<br> backwards";
         } else {
+            button("h");
             down.style.backgroundColor ="white";
         }
         if (speed > 2) {
+            button("f");
             up.style.backgroundColor ="#00A7FF";
             output.innerHTML += "<br> forwards";
         } else {
+            button("h");
             up.style.backgroundColor ="white";
         }
     });
