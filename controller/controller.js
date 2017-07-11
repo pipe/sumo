@@ -1,5 +1,5 @@
 let args = {
-    frequency:100,					// ( How often the object sends the values - milliseconds )
+    frequency:50,					// ( How often the object sends the values - milliseconds )
     gravityNormalized:true,			// ( If the gravity related values to be normalized )
     orientationBase:GyroNorm.GAME,	// ( Can be GyroNorm.GAME or GyroNorm.WORLD. gn.GAME returns orientation values with respect to the head direction of the device. gn.WORLD returns the orientation values with respect to the actual north direction of the world. )
     decimalCount:0,					// ( How many digits after the decimal point will there be in the return values )
@@ -26,7 +26,6 @@ gn.init(args).then(function(){
     // }
     else {
         start_gn();
-        document.getElementById("error-message").innerHTML = "Hello";
     }
 
 }).catch(function(e){
@@ -34,7 +33,7 @@ gn.init(args).then(function(){
 });
 
 function logger(data) {
-    document.getElementById("error-message").innerHTML = data.message + "\n";
+    document.getElementById("error-message").innerHTML = data.message + "<br>";
 }
 function stop_gn() { //todo make button for stop
     gn.stop();
@@ -72,29 +71,29 @@ function gnCallBack(data) {
         // data.dm.gamma	( devicemotion event rotationRate gamma value )
 
         output.innerHTML = "Direction: " + direction +
-            "\n Speed: " + speed;
+            "<br> Speed: " + speed;
 
         if (direction > 0 && direction < 180) {
             left.style.backgroundColor ="#00A7FF";
-            output.innerHTML += "\n Turning left ";
+            output.innerHTML += "<br> Turning left ";
         } else {
             left.style.backgroundColor ="white";
         }
         if (direction > 180 && direction < 360) {
             right.style.backgroundColor ="#00A7FF";
-            output.innerHTML += "\n Turning right ";
+            output.innerHTML += "<br> Turning right ";
         } else {
             right.style.backgroundColor ="white";
         }
-        if (0 > speed) {
+        if (speed < -2) {
             down.style.backgroundColor ="#00A7FF";
-            output.innerHTML += "\n backwards";
+            output.innerHTML += "<br> backwards";
         } else {
             down.style.backgroundColor ="white";
         }
-        if (0 <= speed) {
+        if (speed > 2) {
             up.style.backgroundColor ="#00A7FF";
-            output.innerHTML += "\n forwards";
+            output.innerHTML += "<br> forwards";
         } else {
             up.style.backgroundColor ="white";
         }
