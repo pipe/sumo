@@ -16,7 +16,6 @@
   "license": "ISC",
   "dependencies": {
     "browserfy": "^1.0.0",
-    "express": "^4.15.3",
-    "gyronorm": "^2.0.6"
+    "express": "^4.15.3"
   }
 }
