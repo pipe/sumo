@@ -2,7 +2,7 @@
 <title>Share my browser</title></head>
     <!--meta name="viewport" content="width=device-width"-->
 
-    <script src="js/require.js"></script>
+    <script src="https://pi.pe/iot/js/sha256.js"></script>
     <script src="https://pi.pe/iot/js/jquery-1.8.3.js"></script>
     <script src="https://pi.pe/iot/js/phono.sdp.js"></script>
     <script src="https://pi.pe/iot/js/pipeDb.js"></script>
@@ -14,7 +14,7 @@
         var pipe;
 
 
-        var sha256 = require("js/sha256");
+        var sha256 = Sha256;
 
         function createHexString(arr) {
             var result = "";
