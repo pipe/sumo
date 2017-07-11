@@ -1,0 +1,160 @@
+<html><head><title>Sumo</title></head>
+<style>
+</style>
+<body id="kp">
+    <script src="https://pi.pe/iot/js/jquery-1.8.3.js"></script>
+    <script src="https://pi.pe/iot/js/phono.sdp.js"></script>
+    <script src="https://pi.pe/iot/js/pipeDb.js"></script>
+    <script src="https://pi.pe/iot/js/pipeDuct.js"></script>
+
+    <script type="text/javascript">
+        var myId = undefined;
+        var duct = null;
+        var pipe;
+        var framedata;
+        var friendList = {};
+        var imagen =0;
+        var img = new Image();
+        var when =0;
+        
+ // public method for encoding an Uint8Array to base64
+function encode (input) {
+    var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+    var output = "";
+    var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+    var i = 0;
+
+    while (i < input.length) {
+        chr1 = input[i++];
+        chr2 = i < input.length ? input[i++] : Number.NaN; // Not sure if the index 
+        chr3 = i < input.length ? input[i++] : Number.NaN; // checks are needed here
+
+        enc1 = chr1 >> 2;
+        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+        enc4 = chr3 & 63;
+
+        if (isNaN(chr2)) {
+            enc3 = enc4 = 64;
+        } else if (isNaN(chr3)) {
+            enc4 = 64;
+        }
+        output += keyStr.charAt(enc1) + keyStr.charAt(enc2) +
+                  keyStr.charAt(enc3) + keyStr.charAt(enc4);
+    }
+    return output;
+}
+        function showFriends(friends){
+            var pics = "<ol>";
+            friends.forEach(function (fr){
+                friendList[fr.finger] = fr;
+
+                pics += "<li><img src='"+fr.tag+"' onclick=\"makedc('"+fr.finger+"');\"></li>";
+            });
+            pics += "</ol>";
+            $('#friendList').html(pics);
+        }
+        function gotId(id) {
+            myId = id;
+            duct = new PipeDuct(id);
+            duct.setOnDataChannel(onNewDc);
+            duct.connect().then(function(d){
+              PipeDb.dbListPrint(showFriends);
+            });
+        }
+        function showSpeed(){
+            var ticks = Date.now() - when;
+            var rate = (1000.0 * imagen) / ticks;
+            console.log("rate = "+rate);
+        }
+        function onDcMessage(msg) {
+            var arrayBuffer = msg.data;
+            var bytes = new Uint8Array(arrayBuffer);
+            img.onload = function(){
+               var ctx = document.getElementById('camera').getContext('2d');
+               ctx.drawImage(img, 0, 0);
+            }
+            img.src = 'data:image/jpeg;base64,'+encode(bytes);
+            imagen++;
+            showSpeed();
+        }
+        function onNewDc(channel) {
+            console.log("New DC ")
+            channel.onmessage = onDcMessage;
+        }
+        function button(l) {
+            console.log("sending command "+l);
+            chout.send(l);
+        }
+        function setKpTarget(){
+            var kp = document.getElementById("kp");
+            kp.onkeydown = function(evt){ 
+                 var key = String.fromCharCode(evt.keyCode).toLowerCase();
+                 switch (evt.keyCode){
+                   case 37: key='l';break;
+                   case 38: key='f';break;
+                   case 39: key='r';break;
+                   case 40: key='b';break;
+                   default: 
+                 }
+                 button(key);
+            };
+            kp.onkeyup = function(evt){ 
+                 var keyCode = evt.keyCode;
+                 button('h');
+            };
+        }
+        function makedc(toId) {
+            console.log("setting to" + toId);
+
+            duct.setTo(toId);
+            var channel = duct.createDataChannel("Sumo", {});
+            channel.onopen = function() {
+                console.log("Sumo channel ");
+                when = Date.now();
+                $('#friendList').hide();
+                $('#camera').show();
+                $('#controls').show();
+                setKpTarget();
+            };
+            channel.onmessage = onDcMessage;
+            pipe = channel;
+        }
+        $(document).ready(function() {
+            $('#controls').hide();
+
+            PipeDb.whoAmI(gotId, function(err) {
+                console.log("could not create identity " + err);
+            });
+        });
+    </script>
+    <h1>remote camera</h1>
+    <div> My Fingerprint is :
+    <div id="friendList">
+
+    </div>
+
+    <h3>Output</h3>
+    <canvas id="camera" width="640" height="360"></canvas>
+
+    <div id="controls" onmouseup="button('h');" ontouchend="button('h')" >
+        <input id="forwardButton" type="button" value="Forward" onmousedown="button('f')" class="control" >
+            Forward&nbsp;
+        </input>
+        <input  id="backButton" type="button" value="Back" onmousedown="button('b')" ontouchstart="button('b');" class="control" >
+            Back&nbsp;
+        </input>
+        <input  id="leftButton" type="button" value="Left" onmousedown="button('l')" ontouchstart="button('l');" class="control" >
+            Left&nbsp;
+        </input>
+        <input  id="rightButton" type="button" value="Right" onmousedown="button('r')" ontouchstart="button('r');" class="control" >
+            Right&nbsp;
+        </input>
+        <input  id="jumpButton" type="button" value="Jump" onmousedown="button('j')" ontouchstart="button('j');" class="control" >
+            Jump&nbsp;
+        </input>
+    </div>
+
+
+</body>
+</html>
