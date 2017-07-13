@@ -65,24 +65,20 @@ function gncbt(data){
    if  (wheel > 2){
       nb = 'r';
        right.style.fill ="#00A7FF";
-   } else {
-       right.style.fill ="#ffffff";
-   }
-   if (wheel < -2) {
+   } else if (wheel < -2) {
       nb = 'l';
       left.style.fill ="#00A7FF";
-   } else
-       {left.style.fill ="#ffffff";}
-   if (drive > 4) {
+   } else if (drive > 4) {
       nb = 'b';
        backwards.style.fill ="#00A7FF";
-   } else
-       {backwards.style.fill ="#ffffff";}
-   if (drive < -4) {
+   } else if (drive < -4) {
       nb = 'f';
        forwards.style.fill ="#00A7FF";
    } else
-       {backwards.style.fill ="#ffffff";}
+       {backwards.style.fill ="#ffffff";
+       forwards.style.fill = "#ffffff";
+       left.style.fill ="#ffffff";
+       right.style.fill = "#ffffff";}
    sendIfChanged(nb);
 }
 function norm_gn() {
