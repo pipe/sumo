@@ -93,8 +93,10 @@ function set_head_gn() {
     gn.setHeadDirection();
 }
 
-screen.onorientationchange = function() {
+resizeCamera = function() {
     const camera = document.getElementById("camera");
     camera.style.width = "100%";
     camera.style.height = camera.style.width() * (56.25/100);
 };
+screen.onorientationchange = function() {resizeCamera();};
+window.onload = function() {resizeCamera();};
