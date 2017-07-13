@@ -53,8 +53,9 @@ var lastBut = 'h';
 
 function sendIfChanged(b){
    if (b != lastBut){
-   button(b);
-   lastBut =b;
+     button(b);
+     lastBut =b;
+   }
 }
 
 function gncbt(data){
