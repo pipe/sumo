@@ -65,13 +65,13 @@ function gncbt(data){
 
    var nb = 'h';
    if  (wheel > 2){
-      nb = 'l';
-   } else if (wheel < -2) {
       nb = 'r';
+   } else if (wheel < -2) {
+      nb = 'l';
    } else if (drive > 2) {
-      nb = 'f';
-   } else if (drive < -2) {
       nb = 'b';
+   } else if (drive < -2) {
+      nb = 'f';
    } 
    sendIfChanged(nb);
 }
