@@ -22,7 +22,7 @@ body {
     right: 20px;
     top: calc(50% - 10vmin);
 }
-
+.go {display:none;}
 .stop, .go {
     position: fixed;
     z-index: 2;
