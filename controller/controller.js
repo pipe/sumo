@@ -37,20 +37,24 @@ function logger(data) {
 }
 function stop_gn() { //todo make button for stop
     gn.stop();
+    document.getElementById("stop").style.display = "block";
+    document.getElementById("go").style.display = "none";
 }
 
 function start_gn() { //todo make button for start
     gn.start(gnCallBack);
     gn.setHeadDirection();
+    document.getElementById("stop").style.display = "none";
+    document.getElementById("go").style.display = "block";
 }
 
 function gnCallBack(data) {
     gn.start(function(data){
-        const up = document.getElementById("up");
-        const down = document.getElementById("down");
+        const forwards = document.getElementById("forwards");
+        const backwards = document.getElementById("backwards");
         const left = document.getElementById("left");
         const right = document.getElementById("right");
-        let output = document.getElementById("output");
+        let output = document.getElementById("output"); //todo remove - for testing purposes only
 
         // Process:
         let direction = Math.round(data.do.alpha);	    // DIRECTION ( deviceorientation event alpha value )
@@ -71,39 +75,39 @@ function gnCallBack(data) {
         // data.dm.gamma	( devicemotion event rotationRate gamma value )
 
         output.innerHTML = "Direction: " + direction +
-            "<br> Speed: " + speed;
+            "<br> Speed: " + speed; //todo remove - used for testing
 
         if (direction > 0 && direction < 180) {
             button("l");
-            left.style.backgroundColor ="#00A7FF";
-            output.innerHTML += "<br> Turning left ";
+            left.style.fill ="#00A7FF";
+            output.innerHTML += "<br> Turning left "; //todo remove - used for testing
         } else {
             button("h");
-            left.style.backgroundColor ="white";
+            left.style.fill ="#ffffff";
         }
         if (direction > 180 && direction < 360) {
             button("r");
-            right.style.backgroundColor ="#00A7FF";
-            output.innerHTML += "<br> Turning right ";
+            right.style.fill ="#00A7FF";
+            output.innerHTML += "<br> Turning right "; //todo remove - used for testing
         } else {
             button("h");
-            right.style.backgroundColor ="white";
+            right.style.fill ="#ffffff";
         }
         if (speed < -2) {
             button("b");
-            down.style.backgroundColor ="#00A7FF";
-            output.innerHTML += "<br> backwards";
+            backwards.style.fill ="#00A7FF";
+            output.innerHTML += "<br> backwards"; //todo remove - used for testing
         } else {
             button("h");
-            down.style.backgroundColor ="white";
+            down.style.fill ="#ffffff";
         }
         if (speed > 2) {
             button("f");
-            up.style.backgroundColor ="#00A7FF";
-            output.innerHTML += "<br> forwards";
+            forwards.style.fill ="#00A7FF";
+            output.innerHTML += "<br> forwards"; //todo remove - used for testing
         } else {
             button("h");
-            up.style.backgroundColor ="white";
+            up.style.fill ="#ffffff";
         }
     });
 }
@@ -115,4 +119,14 @@ function org_gn() {
 }
 function set_head_gn() {
     gn.setHeadDirection();
+
+
 }
+
+screen.onorientationchange = function() {
+    const camera = document.getElementById("camera");
+    camera.style.width = "100%";
+    camera.style.height = camera.style.width() * (56.25/100);
+};
+
+
