@@ -6,7 +6,7 @@ let args = {
     logger:logger,			        // ( Function to be called to log messages from gyronorm.js )
     screenAdjusted:true			    // ( If set to true it will return screen adjusted values. )
 };
-//
+
 let gn = new GyroNorm();
 
 gn.init(args).then(function(){
@@ -15,18 +15,6 @@ gn.init(args).then(function(){
     if(!isAvailable.deviceOrientationAvailable) {
         logger({message:'Device orientation is not available.'});
     }
-    // if(!isAvailable.accelerationAvailable) {
-    //     logger({message:'Device acceleration is not available.'});
-    // }
-    // if(!isAvailable.accelerationIncludingGravityAvailable) {
-    //     logger({message:'Device acceleration incl. gravity is not available.'});
-    // }
-    // if(!isAvailable.rotationRateAvailable) {
-    //     logger({message:'Device rotation rate is not available.'});
-    // }
-    //else {
-    //    start_gn();
-    //}
 
 }).catch(function(e){
     console.log(e);
@@ -37,11 +25,15 @@ function logger(data) {
 }
 function stop_gn() { //todo make button for stop
     gn.stop();
+    document.getElementById("stop").style.display = "block";
+    document.getElementById("go").style.display = "none";
 }
 
 function start_gn() { //todo make button for start
     gn.start(gncbt);
     //gn.setHeadDirection();
+    document.getElementById("stop").style.display = "none";
+    document.getElementById("go").style.display = "block";
 }
 const up = document.getElementById("up");
 const down = document.getElementById("down");
@@ -61,86 +53,36 @@ function sendIfChanged(b){
 function gncbt(data){
    let wheel = data.dm.gy;
    let drive = data.dm.gz;
+   const forwards = document.getElementById("forwards");
+   const backwards = document.getElementById("backwards");
+   const left = document.getElementById("left");
+   const right = document.getElementById("right");
    logger({message:""+data.dm.gx+"<br/>,"+data.dm.gy+"<br/>"+data.dm.gz});
 
-   var nb = 'h';
+   let nb = 'h';
    if  (wheel > 2){
       nb = 'r';
-   } else if (wheel < -2) {
+       right.style.fill ="#00A7FF";
+   } else {
+       right.style.fill ="#ffffff";
+   }
+   if (wheel < -2) {
       nb = 'l';
-   } else if (drive > 4) {
+      left.style.fill ="#00A7FF";
+   } else
+       {left.style.fill ="#ffffff";}
+   if (drive > 4) {
       nb = 'b';
-   } else if (drive < -4) {
+       backwards.style.fill ="#00A7FF";
+   } else
+       {backwards.style.fill ="#ffffff";}
+   if (drive < -4) {
       nb = 'f';
-   } 
+       forwards.style.fill ="#00A7FF";
+   } else
+       {backwards.style.fill ="#ffffff";}
    sendIfChanged(nb);
 }
-
-/*
-function gnCallBack(data) {
-    gn.start(function(data){
-        const up = document.getElementById("up");
-        const down = document.getElementById("down");
-        const left = document.getElementById("left");
-        const right = document.getElementById("right");
-        let output = document.getElementById("output");
-
-        // Process:
-        let direction = Math.round(data.do.alpha);	    // DIRECTION ( deviceorientation event alpha value )
-        // data.do.beta		( deviceorientation event beta value )
-        let speed = Math.round(data.do.gamma);	    // SPEED ( deviceorientation event gamma value )
-        // data.do.absolute	( deviceorientation event absolute value )
-
-        // data.dm.x		( devicemotion event acceleration x value )
-        // data.dm.y		( devicemotion event acceleration y value )
-        // data.dm.z		( devicemotion event acceleration z value )
-
-        // data.dm.gx		( devicemotion event accelerationIncludingGravity x value )
-        // data.dm.gy		( devicemotion event accelerationIncludingGravity y value )
-        // data.dm.gz		( devicemotion event accelerationIncludingGravity z value )
-
-        // data.dm.alpha	( devicemotion event rotationRate alpha value )
-        // data.dm.beta		( devicemotion event rotationRate beta value )
-        // data.dm.gamma	( devicemotion event rotationRate gamma value )
-
-        output.innerHTML = "Direction: " + direction +
-            "<br> Speed: " + speed;
-
-        if (direction > 0 && direction < 180) {
-            button("l");
-            left.style.backgroundColor ="#00A7FF";
-            output.innerHTML += "<br> Turning left ";
-        } else {
-            button("h");
-            left.style.backgroundColor ="white";
-        }
-        if (direction > 180 && direction < 360) {
-            button("r");
-            right.style.backgroundColor ="#00A7FF";
-            output.innerHTML += "<br> Turning right ";
-        } else {
-            button("h");
-            right.style.backgroundColor ="white";
-        }
-        if (speed < -2) {
-            button("b");
-            down.style.backgroundColor ="#00A7FF";
-            output.innerHTML += "<br> backwards";
-        } else {
-            button("h");
-            down.style.backgroundColor ="white";
-        }
-        if (speed > 2) {
-            button("f");
-            up.style.backgroundColor ="#00A7FF";
-            output.innerHTML += "<br> forwards";
-        } else {
-            button("h");
-            up.style.backgroundColor ="white";
-        }
-    });
-}
-*/
 function norm_gn() {
     gn.normalizeGravity(true);
 }
@@ -150,3 +92,9 @@ function org_gn() {
 function set_head_gn() {
     gn.setHeadDirection();
 }
+
+screen.onorientationchange = function() {
+    const camera = document.getElementById("camera");
+    camera.style.width = "100%";
+    camera.style.height = camera.style.width() * (56.25/100);
+};
