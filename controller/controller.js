@@ -40,7 +40,7 @@ function stop_gn() { //todo make button for stop
 }
 
 function start_gn() { //todo make button for start
-    gn.start(gnbt);
+    gn.start(gncbt);
     //gn.setHeadDirection();
 }
 const up = document.getElementById("up");
