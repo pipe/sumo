@@ -120,6 +120,7 @@ function encode (input) {
                 $('#camera').show();
                 $('#controls').show();
                 setKpTarget();
+                start_gn();
             };
             channel.onmessage = onDcMessage;
             pipe = channel;
@@ -135,13 +136,10 @@ function encode (input) {
     <h1>remote camera</h1>
     <div> My Fingerprint is :
     <div id="friendList">
-
     </div>
 
-    <h3>Output</h3>
     <canvas id="camera"></canvas>
-
-        <div id="controls" onmouseup="button('h');" ontouchend="button('h')" >
+    <div id="controls" onmouseup="button('h');" ontouchend="button('h')" >
             <div class="bf-controls">
                 <div id="forwardButton" onmousedown="button('f')" class="control" >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="40.23 128 73.539 73.539">
@@ -204,7 +202,5 @@ function encode (input) {
                 </div>
             </div>
         </div>
-
-
 </body>
 </html>
