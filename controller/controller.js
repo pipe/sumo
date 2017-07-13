@@ -25,15 +25,17 @@ function logger(data) {
 }
 function stop_gn() { //todo make button for stop
     gn.stop();
-    document.getElementById("stop").style.display = "block";
-    document.getElementById("go").style.display = "none";
+    console.log("Called stop_gn()");
+    document.getElementById("stop").style.display = "none";
+    document.getElementById("go").style.display = "block";
 }
 
 function start_gn() { //todo make button for start
     gn.start(gncbt);
     //gn.setHeadDirection();
-    document.getElementById("stop").style.display = "none";
-    document.getElementById("go").style.display = "block";
+    console.log("Called start_gn()");
+    document.getElementById("stop").style.display = "block";
+    document.getElementById("go").style.display = "none";
 }
 const up = document.getElementById("up");
 const down = document.getElementById("down");
