@@ -1,5 +1,5 @@
 let args = {
-    frequency:10,					// ( How often the object sends the values - milliseconds )
+    frequency:100,					// ( How often the object sends the values - milliseconds )
     gravityNormalized:true,			// ( If the gravity related values to be normalized )
     orientationBase:GyroNorm.GAME,	// ( Can be GyroNorm.GAME or GyroNorm.WORLD. gn.GAME returns orientation values with respect to the head direction of the device. gn.WORLD returns the orientation values with respect to the actual north direction of the world. )
     decimalCount:0,					// ( How many digits after the decimal point will there be in the return values )
@@ -33,7 +33,7 @@ gn.init(args).then(function(){
 });
 
 function logger(data) {
-    document.getElementById("error-message").innerHTML = data.message + "<br>";
+    document.getElementById("error-message").innerHTML = data.message + "<br/>";
 }
 function stop_gn() { //todo make button for stop
     gn.stop();
@@ -61,16 +61,16 @@ function sendIfChanged(b){
 function gncbt(data){
    let wheel = data.dm.gy;
    let drive = data.dm.gz;
-   logger({message:"data is ("+data.dm.gx+","+data.dm.gy+","+data.dm.gz+")"});
+   logger({message:""+data.dm.gx+"<br/>,"+data.dm.gy+"<br/>"+data.dm.gz});
 
    var nb = 'h';
    if  (wheel > 2){
       nb = 'r';
    } else if (wheel < -2) {
       nb = 'l';
-   } else if (drive > 2) {
+   } else if (drive > 4) {
       nb = 'b';
-   } else if (drive < -2) {
+   } else if (drive < -4) {
       nb = 'f';
    } 
    sendIfChanged(nb);
