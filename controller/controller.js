@@ -1,5 +1,5 @@
 let args = {
-    frequency:50,					// ( How often the object sends the values - milliseconds )
+    frequency:10,					// ( How often the object sends the values - milliseconds )
     gravityNormalized:true,			// ( If the gravity related values to be normalized )
     orientationBase:GyroNorm.GAME,	// ( Can be GyroNorm.GAME or GyroNorm.WORLD. gn.GAME returns orientation values with respect to the head direction of the device. gn.WORLD returns the orientation values with respect to the actual north direction of the world. )
     decimalCount:0,					// ( How many digits after the decimal point will there be in the return values )
@@ -24,9 +24,9 @@ gn.init(args).then(function(){
     // if(!isAvailable.rotationRateAvailable) {
     //     logger({message:'Device rotation rate is not available.'});
     // }
-    else {
-        start_gn();
-    }
+    //else {
+    //    start_gn();
+    //}
 
 }).catch(function(e){
     console.log(e);
@@ -40,10 +40,42 @@ function stop_gn() { //todo make button for stop
 }
 
 function start_gn() { //todo make button for start
-    gn.start(gnCallBack);
-    gn.setHeadDirection();
+    gn.start(gnbt);
+    //gn.setHeadDirection();
+}
+const up = document.getElementById("up");
+const down = document.getElementById("down");
+const left = document.getElementById("left");
+const right = document.getElementById("right");
+const output = document.getElementById("output");
+
+var lastBut = 'h';
+
+function sendIfChanged(b){
+   if (b != lastBut){
+   button(b);
+   lastBut =b;
 }
 
+function gncbt(data){
+   let wheel = data.dm.gy;
+   let drive = data.dm.gz;
+   console.log("data is ("+data.dm.gx+","+data.dm.gy+","+data.dm.gz+")");
+
+   var nb = 'h';
+   if  (wheel > 2){
+      nb = 'l';
+   } else if (wheel < 2) {
+      nb = 'r';
+   } else if (drive > 2) {
+      nb = 'f';
+   } else if (drive < 2) {
+      nb = 'b';
+   } 
+   sendIfChanged(nb);
+}
+
+/*
 function gnCallBack(data) {
     gn.start(function(data){
         const up = document.getElementById("up");
@@ -107,6 +139,7 @@ function gnCallBack(data) {
         }
     });
 }
+*/
 function norm_gn() {
     gn.normalizeGravity(true);
 }

@@ -118,6 +118,7 @@ function encode (input) {
                 $('#camera').show();
                 $('#controls').show();
                 setKpTarget();
+                start_gn();
             };
             channel.onmessage = onDcMessage;
             pipe = channel;
