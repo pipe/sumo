@@ -66,11 +66,11 @@ function gncbt(data){
    var nb = 'h';
    if  (wheel > 2){
       nb = 'l';
-   } else if (wheel < 2) {
+   } else if (wheel < -2) {
       nb = 'r';
    } else if (drive > 2) {
       nb = 'f';
-   } else if (drive < 2) {
+   } else if (drive < -2) {
       nb = 'b';
    } 
    sendIfChanged(nb);
