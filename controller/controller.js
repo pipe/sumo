@@ -61,7 +61,7 @@ function sendIfChanged(b){
 function gncbt(data){
    let wheel = data.dm.gy;
    let drive = data.dm.gz;
-   logger("data is ("+data.dm.gx+","+data.dm.gy+","+data.dm.gz+")");
+   logger({message:"data is ("+data.dm.gx+","+data.dm.gy+","+data.dm.gz+")"});
 
    var nb = 'h';
    if  (wheel > 2){
