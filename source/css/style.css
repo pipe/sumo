@@ -1,8 +1,8 @@
-body {background-color: #000000; }
-#camera {
-    width:100%;
-    height:100%;
+body {
+    background-color: #000000;
+    color:#ffffff;
 }
+
 #error-message {
     text-align: center;
 }
