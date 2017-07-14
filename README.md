@@ -1,11 +1,9 @@
-# sumo
-Remote control of a Sumo with |pipe|
+A demo for driving a Parrot JumpingSumo remotely using |pipe|
 
-##Setup		
-`npm install`		
-		
-## Start task manager		
-`gulp`		
-		
-## Start server		
-`npm start`
+live pages at: https://pipe.github.io/sumo/
+
+You'll need to borrow access to a Sumo using the 
+|pipe| lend-borrow semantics.
+
+
+
