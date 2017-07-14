@@ -8,7 +8,8 @@ let args = {
 };
 
 let gn = new GyroNorm();
-
+const doc = window.document;
+const docEl = doc.documentElement;
 gn.init(args).then(function(){
 
     let isAvailable = gn.isAvailable();
@@ -23,25 +24,33 @@ gn.init(args).then(function(){
 function logger(data) {
     document.getElementById("error-message").innerHTML = data.message + "<br/>";
 }
-function stop_gn() { //todo make button for stop
-    gn.stop();
-    console.log("Called stop_gn()");
+function stop_gn() {
+    const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+    cancelFullScreen.call(doc);
+    const forwards = document.getElementById("forwards");
+    const backwards = document.getElementById("backwards");
+    const left = document.getElementById("left");
+    const right = document.getElementById("right");
+    gn.stop(gncbt);
     document.getElementById("stop").style.display = "none";
     document.getElementById("go").style.display = "block";
+    right.style.fill = "#ffffff";
+    left.style.fill = "#ffffff";
+    forwards.style.fill = "#ffffff";
+    backwards.style.fill = "#ffffff";
 }
 
-function start_gn() { //todo make button for start
+function start_gn() {
+    const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    requestFullScreen.call(docEl);
+    let locOrientation = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation || screen.orientation.lock;
+    locOrientation('landscape-primary');
     gn.start(gncbt);
-    //gn.setHeadDirection();
-    console.log("Called start_gn()");
+    gn.setHeadDirection(); //If screenAdjusted is true, it will set the north to the user's direction
     document.getElementById("stop").style.display = "block";
     document.getElementById("go").style.display = "none";
 }
-const up = document.getElementById("up");
-const down = document.getElementById("down");
-const left = document.getElementById("left");
-const right = document.getElementById("right");
-const output = document.getElementById("output");
+
 
 var lastBut = 'h';
 
@@ -55,30 +64,19 @@ function sendIfChanged(b){
 function gncbt(data){
    let wheel = data.dm.gy;
    let drive = data.dm.gz;
-   const forwards = document.getElementById("forwards");
-   const backwards = document.getElementById("backwards");
-   const left = document.getElementById("left");
-   const right = document.getElementById("right");
-   logger({message:""+data.dm.gx+"<br/>,"+data.dm.gy+"<br/>"+data.dm.gz});
+
+   logger({message:""+data.dm.gx+"<br/>"+data.dm.gy+"<br/>"+data.dm.gz});
 
    let nb = 'h';
-   if  (wheel > 2){
-      nb = 'r';
-       right.style.fill ="#00A7FF";
-   } else if (wheel < -2) {
-      nb = 'l';
-      left.style.fill ="#00A7FF";
-   } else if (drive > 4) {
-      nb = 'b';
-       backwards.style.fill ="#00A7FF";
-   } else if (drive < -4) {
-      nb = 'f';
-       forwards.style.fill ="#00A7FF";
-   } else
-       {backwards.style.fill ="#ffffff";
-       forwards.style.fill = "#ffffff";
-       left.style.fill ="#ffffff";
-       right.style.fill = "#ffffff";}
+    if  (wheel > 2){
+        nb = 'r';
+    } else if (wheel < -2) {
+        nb = 'l';
+    } else if (drive > 4) {
+        nb = 'b';
+    } else if (drive < -4) {
+        nb = 'f';
+    }
    sendIfChanged(nb);
 }
 function norm_gn() {
@@ -96,5 +94,9 @@ resizeCamera = function() {
     camera.style.width = "100%";
     camera.style.height = camera.style.width * (56.25/100);
 };
-screen.onorientationchange = function() {resizeCamera();};
-window.onload = function() {resizeCamera();};
+screen.onorientationchange = function() {
+    resizeCamera();
+};
+window.onload = function() {
+    resizeCamera();
+};
