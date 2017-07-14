@@ -86,9 +86,26 @@ function encode (input) {
             console.log("New DC ")
             channel.onmessage = onDcMessage;
         }
+        function updateUI(l){
+            const forwards = document.getElementById("forwards");
+            const backwards = document.getElementById("backwards");
+            const left = document.getElementById("left");
+            const right = document.getElementById("right");
+
+            if (l == "f") {forwards.style.fill = "#00A7FF";}
+            else {forwards.style.fill = "#ffffff";}
+            if (l == "b") {backwards.style.fill = "#00A7FF";}
+            else {backwards.style.fill = "#ffffff";}
+            if (l == "l") {left.style.fill = "#00A7FF";}
+            else {left.style.fill = "#ffffff";}
+            if (l == "r") {right.style.fill ="#00A7FF";}
+            else {right.style.fill = "#ffffff";}
+        }
         function button(l) {
+
             console.log("sending command "+l);
             pipe.send(l);
+            updateUI(l);
         }
         function setKpTarget(){
             var kp = document.getElementById("kp");
@@ -135,34 +152,16 @@ function encode (input) {
         function stopGn() {
             button("h");
             stop_gn();
-
-            const forwards = document.getElementById("forwards");
-            const backwards = document.getElementById("backwards");
-            const left = document.getElementById("left");
-            const right = document.getElementById("right");
-
-            if (l == "f") {forwards.style.fill = "#00A7FF";}
-            else {forwards.style.fill = "#ffffff";}
-            if (l == "b") {backwards.style.fill = "#00A7FF";}
-            else {backwards.style.fill = "#ffffff";}
-            if (l == "l") {left.style.fill = "#00A7FF";}
-            else {left.style.fill = "#ffffff";}
-            if (l == "r") {right.style.fill ="#00A7FF";}
-            else {right.style.fill = "#ffffff";}
-
 //            pipe.close();
         }
         function startGn() {
             start_gn();
         }
     </script>
-    <h1>remote camera</h1>
-    My Fingerprint is :
     <div id="friendList">
     </div>
 
     <canvas id="camera"></canvas>
-    <div id="error-message"></div>
 
     <div id="controls" ontouchend="button('h')">
         <div class="bf-controls">
@@ -226,5 +225,6 @@ function encode (input) {
 
         </div>
     </div>
+    <div id="error-message"></div>
 </body>
 </html>
