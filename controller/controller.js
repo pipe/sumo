@@ -44,9 +44,9 @@ function start_gn() {
     const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
     requestFullScreen.call(docEl);
     let locOrientation = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation || screen.orientation.lock;
-    locOrientation('landscape-primary');
+    //locOrientation('landscape-primary');
     gn.start(gncbt);
-    gn.setHeadDirection(); //If screenAdjusted is true, it will set the north to the user's direction
+    //gn.setHeadDirection(); //If screenAdjusted is true, it will set the north to the user's direction
     document.getElementById("stop").style.display = "block";
     document.getElementById("go").style.display = "none";
 }
