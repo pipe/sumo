@@ -8,7 +8,8 @@ let args = {
 };
 
 let gn = new GyroNorm();
-
+const doc = window.document;
+const docEl = doc.documentElement;
 gn.init(args).then(function(){
 
     let isAvailable = gn.isAvailable();
@@ -24,6 +25,8 @@ function logger(data) {
     document.getElementById("error-message").innerHTML = data.message + "<br/>";
 }
 function stop_gn() {
+    const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+    cancelFullScreen.call(doc);
     const forwards = document.getElementById("forwards");
     const backwards = document.getElementById("backwards");
     const left = document.getElementById("left");
@@ -38,8 +41,12 @@ function stop_gn() {
 }
 
 function start_gn() {
+    const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    requestFullScreen.call(docEl);
+    let locOrientation = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation || screen.orientation.lock;
+    locOrientation('landscape-primary');
     gn.start(gncbt);
-    gn.setHeadDirection();
+    gn.setHeadDirection(); //If screenAdjusted is true, it will set the north to the user's direction
     document.getElementById("stop").style.display = "block";
     document.getElementById("go").style.display = "none";
 }
@@ -87,5 +94,9 @@ resizeCamera = function() {
     camera.style.width = "100%";
     camera.style.height = camera.style.width * (56.25/100);
 };
-screen.onorientationchange = function() {resizeCamera();};
-window.onload = function() {resizeCamera();};
+screen.onorientationchange = function() {
+    resizeCamera();
+};
+window.onload = function() {
+    resizeCamera();
+};

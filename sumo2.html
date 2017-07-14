@@ -148,33 +148,33 @@ function encode (input) {
 
     <canvas id="camera"></canvas>
     <div id="error-message"></div>
-    <div id="controls" onmouseup="button('h');" >
-            <div class="bf-controls">
-                <div id="forwardButton" onmousedown="button('f')" class="control" >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="40.23 128 73.539 73.539">
-                        <path id="forwards" class="forwards" d="M0,0H52L18.449,18.449,0,52Z" transform="translate(77 128) rotate(45)" />
-                    </svg>&nbsp;
-                </div>
-                <div id="backButton" onmousedown="button('b')" class="control" >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="40.23 159 73.539 73.539">
-                        <path id="backwards" class="backwards" d="M0,0H52L18.449,18.449,0,52Z" transform="translate(77 232.539) rotate(-135)" />
-                    </svg>&nbsp;
-                </div>
-            </div>
-            <div class="lr-controls">
-                <div id="leftButton" onmousedown="button('l')" class="control" >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="502.73 143 73.539 73.539">
-                        <path id="left" class="left" d="M0,0H52L18.449,18.449,0,52Z" transform="translate(502.73 179.77) rotate(-45)" />
-                    </svg>&nbsp;
-                </div>
-                <div id="rightButton" onmousedown="button('r')" class="control" >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="533.73 143 73.539 73.539">
-                        <path id="right" class="right" d="M0,0H52L18.449,18.449,0,52Z" transform="translate(607.27 179.77) rotate(135)"></path>
-                    </svg>
-                </div>
-            </div>
 
+    <div id="controls" ontouchend="button('h')">
+        <div class="bf-controls">
+            <div id="forwardButton" ontouchstart="button('f');" class="control" >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="40.23 128 73.539 73.539">
+                    <path id="forwards" class="forwards" d="M0,0H52L18.449,18.449,0,52Z" transform="translate(77 128) rotate(45)" />
+                </svg>&nbsp;
+            </div>
+            <div id="backButton" ontouchstart="button('b');" class="control" >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="40.23 159 73.539 73.539">
+                    <path id="backwards" class="backwards" d="M0,0H52L18.449,18.449,0,52Z" transform="translate(77 232.539) rotate(-135)" />
+                </svg>&nbsp;
+            </div>
         </div>
+        <div class="lr-controls">
+            <div id="leftButton" ontouchstart="button('l');" class="control" >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="502.73 143 73.539 73.539">
+                    <path id="left" class="left" d="M0,0H52L18.449,18.449,0,52Z" transform="translate(502.73 179.77) rotate(-45)" />
+                </svg>&nbsp;
+            </div>
+            <div id="rightButton" ontouchstart="button('r');" class="control" >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="533.73 143 73.539 73.539">
+                    <path id="right" class="right" d="M0,0H52L18.449,18.449,0,52Z" transform="translate(607.27 179.77) rotate(135)"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
     <div class="stopngo">
         <div  id="go" class="go" onmousedown="startGn()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="354 -357 102 102">
