@@ -14,6 +14,9 @@ app.get('/', function(req, res) {
 app.get('/sumo', function(req, res) {
     res.sendFile(path.join(__dirname + "/sumo2.html"));
 });
+app.get('/index', function(req, res) {
+    res.sendFile(path.join(__dirname + "/index.html"));
+});
 
 app.listen(port);
 

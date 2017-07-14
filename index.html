@@ -1,21 +1,55 @@
 <html><head><title>|pipe| demo at NBT</title>
 <link href="https://pi.pe/pipe.css" media="all" rel="stylesheet" />
+    <style>
+        .wrap {
+            width: 80vmin;
+            margin: 0 auto 0 auto;
+            padding: 2vmin;
+        }
+        h1, h2 {
+            text-align: center;
+            font-weight: 300;}
+        h1 {
+            margin-top: 20vmin;
+            font-size: 12vmin;
+        }
+        h2 {
+            font-size: 4.5vmin;
+        }
+        .devices {
+            display: flex;
+            flex-direction: row;
+        }
+        .devices a {
+            display: flex;
+            flex-grow: 1;
+            margin: 20vmin 2vmin 2vmin 2vmin;
+            justify-content: center;
+            align-items: center;
+        }
+        a {
+            text-decoration: none;
+            font-size: 3.5vmin;
+            padding: 4vmin 0 4vmin 0;
+            background-color: #00A7FF;
+            border: 1px solid #444444;
+        }
+        a:hover {
+            background-color: #333333;
+        }
+        p {
+            font-size: 3vmin;
+            text-align: center;
+        }
+    </style>
 </head>
 <div class="wrap">
-    <H1>|pipe| demo page</H1>
-    <p>Sumo drive</p>
-<div>
-    <ul>
-        <p>Manage devices:<p>
-        <li><a href="fshare.html">Borrow the Sumo</a></li>
-    </ul>
-</div>
-<div>
-    <ul>
-        <p>Access devices:<p>
-        <li><a href="sumo2.html">Drive the Sumo</a></li>
-    </ul>
-</div>
+    <H1>|pipe|</H1>
+    <h2>Sumo Drive Demo</h2>
+    <div class="devices">
+        <a href="fshare.html">Borrow Sumo</a>
+        <a href="sumo2.html">Drive Sumo</a>
+    </div>
 </div>
 </body>
 </html>
