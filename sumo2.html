@@ -135,6 +135,21 @@ function encode (input) {
         function stopGn() {
             button("h");
             stop_gn();
+
+            const forwards = document.getElementById("forwards");
+            const backwards = document.getElementById("backwards");
+            const left = document.getElementById("left");
+            const right = document.getElementById("right");
+
+            if (l == "f") {forwards.style.fill = "#00A7FF";}
+            else {forwards.style.fill = "#ffffff";}
+            if (l == "b") {backwards.style.fill = "#00A7FF";}
+            else {backwards.style.fill = "#ffffff";}
+            if (l == "l") {left.style.fill = "#00A7FF";}
+            else {left.style.fill = "#ffffff";}
+            if (l == "r") {right.style.fill ="#00A7FF";}
+            else {right.style.fill = "#ffffff";}
+
 //            pipe.close();
         }
         function startGn() {
