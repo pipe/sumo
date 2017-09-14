@@ -87,6 +87,9 @@ function sendKeyEvents() {
         }
         sendIfChanged(key);
     });
+    document.addEventListener("keyup", function (event) {
+        sendIfChanged('h')
+    });
 }
 
 //////  GYRONORM EVENTS
