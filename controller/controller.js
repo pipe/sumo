@@ -18,7 +18,7 @@ gn.init(args).then(function(){
             logger({message:'Device orientation is not available.'});
         }
     }
-    
+
 }).catch(function(e){
     console.log(e);
 });
@@ -53,8 +53,8 @@ function start_gn() {
     document.getElementById("go").style.display = "none";
 }
 
-
-var lastBut = 'h';
+//////  SENDING EVENTS
+let lastBut = 'h';
 
 function sendIfChanged(b){
    if (b != lastBut){
@@ -63,6 +63,33 @@ function sendIfChanged(b){
    }
 }
 
+//////  KEY EVENTS
+function sendKeyEvents() {
+    document.addEventListener("keydown", function (event) {
+
+        let key = 'h';
+
+        switch (event.key) {
+            case "ArrowLeft":
+                key = 'l';
+                break;
+            case "ArrowUp":
+                key = 'f';
+                break;
+            case "ArrowRight":
+                key = 'r';
+                break;
+            case "ArrowDown":
+                key = 'b';
+                break;
+            default:
+                key = 'h';
+        }
+        sendIfChanged(key);
+    });
+}
+
+//////  GYRONORM EVENTS
 function gncbt(data){
    let wheel = data.dm.gy;
    let drive = data.dm.gz;
@@ -81,6 +108,7 @@ function gncbt(data){
     }
    sendIfChanged(nb);
 }
+
 function norm_gn() {
     gn.normalizeGravity(true);
 }
@@ -102,4 +130,5 @@ screen.onorientationchange = function() {
 };
 window.onload = function() {
     resizeCamera();
+    sendKeyEvents();
 };
