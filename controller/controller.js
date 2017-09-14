@@ -13,10 +13,12 @@ const docEl = doc.documentElement;
 gn.init(args).then(function(){
 
     let isAvailable = gn.isAvailable();
-    if(!isAvailable.deviceOrientationAvailable) {
-        logger({message:'Device orientation is not available.'});
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        if(!isAvailable.deviceOrientationAvailable) {
+            logger({message:'Device orientation is not available.'});
+        }
     }
-
+    
 }).catch(function(e){
     console.log(e);
 });
