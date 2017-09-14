@@ -13,8 +13,10 @@ const docEl = doc.documentElement;
 gn.init(args).then(function(){
 
     let isAvailable = gn.isAvailable();
-    if(!isAvailable.deviceOrientationAvailable) {
-        logger({message:'Device orientation is not available.'});
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        if(!isAvailable.deviceOrientationAvailable) {
+            logger({message:'Device orientation is not available.'});
+        }
     }
 
 }).catch(function(e){
@@ -51,8 +53,8 @@ function start_gn() {
     document.getElementById("go").style.display = "none";
 }
 
-
-var lastBut = 'h';
+//////  SENDING EVENTS
+let lastBut = 'h';
 
 function sendIfChanged(b){
    if (b != lastBut){
@@ -61,6 +63,36 @@ function sendIfChanged(b){
    }
 }
 
+//////  KEY EVENTS
+function sendKeyEvents() {
+    document.addEventListener("keydown", function (event) {
+
+        let key = 'h';
+
+        switch (event.key) {
+            case "ArrowLeft":
+                key = 'l';
+                break;
+            case "ArrowUp":
+                key = 'f';
+                break;
+            case "ArrowRight":
+                key = 'r';
+                break;
+            case "ArrowDown":
+                key = 'b';
+                break;
+            default:
+                key = 'h';
+        }
+        sendIfChanged(key);
+    });
+    document.addEventListener("keyup", function (event) {
+        sendIfChanged('h')
+    });
+}
+
+//////  GYRONORM EVENTS
 function gncbt(data){
    let wheel = data.dm.gy;
    let drive = data.dm.gz;
@@ -79,6 +111,7 @@ function gncbt(data){
     }
    sendIfChanged(nb);
 }
+
 function norm_gn() {
     gn.normalizeGravity(true);
 }
@@ -88,16 +121,11 @@ function org_gn() {
 function set_head_gn() {
     gn.setHeadDirection();
 }
-
-resizeCamera = function() {
-    const camera = document.getElementById("camera");
-    camera.style.width = "100%";
-    camera.style.height = camera.style.width * (56.25/100);
-};
 screen.onorientationchange = function() {
     resizeCamera();
     set_head_gn();
 };
 window.onload = function() {
     resizeCamera();
+    sendKeyEvents();
 };

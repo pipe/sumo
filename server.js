@@ -6,6 +6,7 @@ port = process.env.PORT || 8080;
 app = express();
 
 app.use(express["static"](path.join(__dirname, '/controller')));
+app.use(express["static"](path.join(__dirname, '/hermione_files')));
 app.use(express["static"](path.join(__dirname, '/source')));
 
 app.get('/', function(req, res) {
@@ -13,6 +14,9 @@ app.get('/', function(req, res) {
 });
 app.get('/sumo', function(req, res) {
     res.sendFile(path.join(__dirname + "/sumo2.html"));
+});
+app.get('/hermione', function(req, res) {
+    res.sendFile(path.join(__dirname + "/hermione.html"));
 });
 app.get('/index', function(req, res) {
     res.sendFile(path.join(__dirname + "/index.html"));

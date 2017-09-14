@@ -1,0 +1,264 @@
+
+<!-- saved from url=(0029)https://pi.pe/iot/fbebop.html -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Term</title>
+    <link rel="stylesheet" href="source/css/style.css">
+  <style>
+    .term {
+        font-family: courier,fixed,swiss,monospace,sans-serif;
+        font-size: 12px;
+        color: #f0f0f0;
+        background: #000000;
+    }
+
+    .termReverse {
+        color: #000000;
+        background: #00ff00;
+    }
+    #note {
+        font-size: 12px;
+    }
+  </style>
+    <script type="text/javascript" src="source/js/resizeCamera.js"></script>
+    <script src="hermione_files/hermioneController.js"></script>
+    <script src="https://pi.pe/iot/js/jquery-1.8.3.js"></script>
+    <script src="https://pi.pe/iot/js/phono.sdp.js"></script>
+    <script src="https://pi.pe/iot/js/pipeDb.js"></script>
+    <script src="https://pi.pe/iot/js/pipeDuct.js"></script>
+    <script src="hermione_files/term.js"></script>
+
+    <script type="text/javascript">
+      var duct = null;
+      var termpipe= null;
+      var vidcc= null;
+
+      function setFriend(dev) {
+          showOnly(dev);
+          makedc(dev);
+      }
+      function showOnly(fing) {
+          PipeDb.dbListPrint(function(friends) {
+              var pics = "<ul>";
+              friends.forEach(function(fr) {
+                  if (fr.finger === fing) {
+                      pics += "<li><img src='" + fr.tag + "'/>Connecting...</li>";
+                  }
+              });
+              pics += "</ul>";
+              $('#friendList').html(pics);
+          }
+          );
+      }
+      function showFriends(friends) {
+          var pics = "<ol>";
+          friends.forEach(function(fr) {
+              pics += "<li><img src='" + fr.tag + "' onclick=\"setFriend('" + fr.finger + "');\"/></li>";
+          });
+          pics += "</ol>";
+          $('#friendList').html(pics);
+      }
+      function gotId(id) {
+          duct = new PipeDuct(id);
+          //duct.setOnDataChannel(onNewDc);
+          PipeDb.dbListPrint(showFriends);
+          $('#remote').hide();
+      }
+      function arrayBufferToString(buffer){
+          var arr = new Uint8Array(buffer);
+          var str = String.fromCharCode.apply(String, arr);
+          if(/[\u0080-\uffff]/.test(str)){
+              throw new Error("this string seems to contain (still encoded) multibytes");
+          }
+          return str;
+      }
+      function stringToArrayBuffer(str){
+          if(/[\u0080-\uffff]/.test(str)){
+              throw new Error("this needs encoding, like UTF-8");
+          }
+          var arr = new Uint8Array(str.length);
+          for(var i=str.length; i--; )
+              arr[i] = str.charCodeAt(i);
+          return arr.buffer;
+      }
+            
+      function sendLine(value) {
+          console.log(""+Date.now()+"<"+value);
+          termpipe.send(stringToArrayBuffer(value));
+          updateUI(value);
+      }
+      function makeTerm(){
+              var channel = duct.createDataChannel("term", {});
+              channel.binaryType = "arraybuffer";
+              channel.onopen = function () {
+                  console.log("Outbound channel ");
+                  $('#friendList').hide();
+                  var fl = document.getElementById('terminal');
+                  term = new Term(80, 24, sendLine, fl);
+                  term.open();
+                  termpipe = channel;
+                  sendLine("TERM=vt100 export TERM\r");
+                  sendLine("date\r");
+                  sendLine("hostname -I\r");
+                  sendLine("./bebop.sh\r");
+                  sendLine("1\r");
+              };
+              channel.onmessage = function(evt) {
+                  var mess = arrayBufferToString(evt.data);
+                  console.log(""+Date.now()+">"+JSON.stringify(evt.data));
+                  term.write(mess);
+              };
+              channel.onclose = function () {
+                  $('#friendList').show();
+                  $('#terminal').hide();
+                  termpipe = null;
+              };
+      }
+      function addvideopatch(mess) {
+          var info = mess.info;
+          console.log("message is " + JSON.stringify(mess))
+          mess.patches = [
+              // add an audio mid
+              {
+                  "action": "increment",
+                  "at": "o=-",
+                  "field": 2
+              },
+              {
+                  "action": "prepend",
+                  "at": "m=application",
+                  "line": "a=group:BUNDLE " + info.datamid + " video"
+              },
+              {
+                  "action": "append",
+                  "at": "end",
+                  "lines": [
+                      "m=video 9 UDP/TLS/RTP/SAVP "+info.vtype,
+                      "c=IN IP4 0.0.0.0",
+                      "a=rtcp:9 IN IP4 0.0.0.0",
+                      "a=mid:video",
+                      "a=sendonly",
+                      "a=rtcp-mux",
+                      "a=rtpmap:" + info.vtype + " " + info.codec,
+                      "a=fmtp:"+ info.vtype +" packetization-mode=1; sprop-parameter-sets=Z0LgKI1oDYPeXwEQAAglYAHoSAnxQio=,aM4NJIA=,Z0LgKI1oDYPeXwEQAAglYAHoSAnxQio=,aM4NJIA=; profile-level-id=42E028",
+                      "a=ssrc:" + info.csrc + " cname:drone",
+                      "a=ssrc:" + info.csrc + " mslabel:" + info.msid,
+                      "a=ssrc:" + info.csrc + " label:" + info.appdata,
+                      "a=ssrc:" + info.csrc + " msid:" + info.msid + " " + info.appdata,
+                  ]
+              },
+              {
+                  "action": "duplicate",
+                  "at": "mid:video",
+                  "line": "a=fingerprint:"
+              },
+              {
+                  "action": "duplicate",
+                  "at": "mid:video",
+                  "line": "a=ice-ufrag:"
+              },
+              {
+                  "action": "duplicate",
+                  "at": "mid:video",
+                  "line": "a=ice-pwd:"
+              },
+              {
+                  "action": "duplicate",
+                  "at": "mid:video",
+                  "line": "a=setup:"
+              }
+          ];
+
+      }
+
+      function sendLd() {
+          var desc = duct.peerCon.localDescription;
+          var mess = {type: desc.type, sdp: desc.sdp, tick: Date.now()};
+          console.log("sending " + JSON.stringify(mess));
+          console.log("to " + vidcc.label);
+          vidcc.send(JSON.stringify(mess));
+      }
+
+      function srd() {
+          var pc = duct.peerCon;
+          console.log("set Remote description  ok");
+          pc.createAnswer(function (desc) {
+              pc.setLocalDescription(desc, function () {
+                  console.log("Set Local description");
+                  setTimeout(sendLd, 100);
+              }, function (e) {
+                  console.log("Set Local description error " + e);
+              });
+          }, function (e) {
+              console.log("Create answer error " + e);
+          });
+      }
+
+      function srdfail(e) {
+          console.log("Set Remote description error " + e);
+      }
+
+      function makeVideo(){
+          var vc = duct.createDataChannel("videorelay",{});
+          vc.onopen = function(){
+             console.log("videorelay channel ");
+             duct.peerCon.onaddstream= function(e){
+                 console.log("got new stream");
+                 var video = document.getElementById('camera');
+                 video.srcObject = e.stream;
+             }
+             setTimeout(function(){
+               console.log("videorelay channel ");
+               vc.send(JSON.stringify({type:"upgrade",time:Date.now()}));
+             },100);
+            vidcc = vc;
+          };
+          vc.onmessage = function(evt){
+             var message = JSON.parse(evt.data);
+             console.log("->" + JSON.stringify(message));
+             if ((message.type == "offer" )
+              || (message.type == "answer")) {
+                if (message.info) {
+                 addvideopatch(message);
+                }
+                var patched = Phono.sdp.patch(duct.peerCon.remoteDescription.sdp, message);
+                console.log("-+>" + JSON.stringify(patched));
+                var rtcd = new RTCSessionDescription(patched);
+                duct.peerCon.setRemoteDescription(rtcd, srd, srdfail);
+             }
+          };
+          vc.onclose = function(){
+          }
+      }
+
+
+      function makedc(deviceId) {
+          console.log("setting deviceId" + deviceId);
+          duct.setTo(deviceId);
+          duct.connect().then(function (d) {
+              makeTerm();
+              setTimeout(function(){
+                makeVideo();
+              },20000);
+           } );
+      }
+
+
+      $(document).ready(function() {
+          PipeDb.whoAmI(gotId, function(err) {
+              console.log("could not create identity " + err);
+          });
+      });
+    </script>
+    </head>
+    <body>
+        <div id="friendList"><ol></ol></div>
+
+        <div id="terminal">test</div>
+        <video id="camera" autoplay="autoplay" width="856" height="480">
+        </video>
+        <div id="movementDisplay">
+        </div>
+    </body>
+</html>
