@@ -43,3 +43,26 @@ body {
     width: 20vmin;
     height: 20vmin;
 }
+
+
+@media screen and (min-width: 640px) {
+    .stop, .go {
+        display:none;
+    }
+    .bf-controls {
+        left: calc(100% - 18vmin);
+        top: auto;
+        bottom: 5vmin;
+    }
+    .lr-controls {
+        left: calc(100% - 23vmin);
+        top:auto;
+        bottom: 10vmin;
+    }
+    #forwardButton, #backButton, #leftButton, #rightButton {
+        width: 10vmin;
+        height: 10vmin;
+        margin: 1vmin;
+    }
+}
+
