@@ -6,6 +6,7 @@ port = process.env.PORT || 8080;
 app = express();
 
 app.use(express["static"](path.join(__dirname, '/controller')));
+app.use(express["static"](path.join(__dirname, '/hermione_files')));
 app.use(express["static"](path.join(__dirname, '/source')));
 
 app.get('/', function(req, res) {
