@@ -44,7 +44,11 @@ function stop_gn() {
 
 function start_gn() {
     const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-    requestFullScreen.call(docEl);
+    try {
+        requestFullScreen.call(docEl);
+    } catch (err) {
+        console.log(err);
+    }
     // let locOrientation = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation || screen.orientation.lock;
     //locOrientation('landscape-primary');
     gn.start(gncbt);
