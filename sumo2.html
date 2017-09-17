@@ -89,6 +89,7 @@ function encode (input) {
             var bytes = new Uint8Array(arrayBuffer);
             img.onload = function(){
               var cam = document.getElementById('camera');
+              var ctx = cam.getContext('2d');
               cam.width = this.naturalWidth;
               cam.height = this.naturalHeight;
               ctx.drawImage(this, 0, 0, this.width, this.height);
