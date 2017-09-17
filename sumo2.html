@@ -88,12 +88,10 @@ function encode (input) {
             var arrayBuffer = msg.data;
             var bytes = new Uint8Array(arrayBuffer);
             img.onload = function(){
-               var cam = document.getElementById('camera');
-               var rat = cam.clientWidth / img.width;
-               var rh = img.height * rat;
-               var ctx = cam.getContext('2d');
-               var rw = cam.clientWidth;
-               ctx.drawImage(img, 0, 0, rw,rh);
+              var cam = document.getElementById('camera');
+              cam.width = this.naturalWidth;
+              cam.height = this.naturalHeight;
+              ctx.drawImage(this, 0, 0, this.width, this.height);
             }
             img.src = 'data:image/jpeg;base64,'+encode(bytes);
             imagen++;
