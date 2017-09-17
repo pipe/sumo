@@ -86,8 +86,8 @@ function sendKeyEvents() {
             case "ArrowDown":
                 key = 'b';
                 break;
-            default:
-                key = 'h';
+            /*default:
+                key = 'h';*/
         }
         sendIfChanged(key);
     });
