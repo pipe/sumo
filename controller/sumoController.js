@@ -126,10 +126,10 @@ function set_head_gn() {
     gn.setHeadDirection();
 }
 screen.onorientationchange = function() {
-    resizeCamera();
+    // resizeCamera();
     set_head_gn();
 };
 window.onload = function() {
-    resizeCamera();
+    // resizeCamera();
     sendKeyEvents();
 };
