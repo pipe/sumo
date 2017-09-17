@@ -92,7 +92,7 @@ function encode (input) {
                var rat = cam.clientWidth / img.width;
                var rh = img.height * rat;
                var ctx = cam.getContext('2d');
-               var rw = cam.width;
+               var rw = cam.clientWidth;
                ctx.drawImage(img, 0, 0, rw,rh);
             }
             img.src = 'data:image/jpeg;base64,'+encode(bytes);
