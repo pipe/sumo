@@ -124,7 +124,7 @@ function encode (input) {
             pipe.send(l);
             updateUI(l);
         }
-        /*function setKpTarget(){
+        function setKpTarget(){
             var kp = document.getElementById("kp");
             kp.onkeydown = function(evt){ 
                  var key = String.fromCharCode(evt.keyCode).toLowerCase();
@@ -141,7 +141,7 @@ function encode (input) {
                  var keyCode = evt.keyCode;
                  button('h');
             };
-        }*/
+        }
         function makedc(toId) {
             console.log("setting to" + toId);
 
@@ -153,8 +153,8 @@ function encode (input) {
                 $('#friendList').hide();
                 $('#camera').show();
                 $('#controls').show();
-                //setKpTarget();
-                start_gn();
+                setKpTarget();
+                //start_gn();
             };
             channel.onmessage = onDcMessage;
             pipe = channel;
@@ -168,11 +168,11 @@ function encode (input) {
         });
         function stopGn() {
             button("h");
-            stop_gn();
+            //stop_gn();
 //            pipe.close();
         }
         function startGn() {
-            start_gn();
+            //start_gn();
         }
     </script>
     <div id="friendList">
