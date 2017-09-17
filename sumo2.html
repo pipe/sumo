@@ -89,7 +89,8 @@ function encode (input) {
             var bytes = new Uint8Array(arrayBuffer);
             img.onload = function(){
                var ctx = document.getElementById('camera').getContext('2d');
-               ctx.drawImage(img, 0, 0);
+               ctx.drawImage(img, 0, 0, 640, 480);
+
             }
             img.src = 'data:image/jpeg;base64,'+encode(bytes);
             imagen++;
