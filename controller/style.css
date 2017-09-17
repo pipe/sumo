@@ -20,7 +20,10 @@ html {
     margin-top: 50%;
     color: black;
 }
-
+#camera {
+    width: 100%;
+    height:100%;
+}
 #up {
     width: 100px;
     height: 100px;
